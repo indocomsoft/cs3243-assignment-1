@@ -10,10 +10,29 @@ class Puzzle(object):
         self.actions = list()
         self.solvable = True
 
+        self.size = 3
+
+    def h(self, state):
+        """Returns sum of manhattan distances of all tiles except blank tile."""
+        cost = 0
+        for row in range(self.size):
+            for col in range(self.size):
+                if state[row][col] != 0:
+                    goal_r = (state[row][col] - 1) // self.size;
+                    goal_c = (state[row][col] - 1) % self.size;
+                    cost += abs(goal_r - row) + abs(goal_c - col)
+        return cost
+
+    def eval_score(self, step, state):
+        """Returns evaluation function f(x) = g(x) + h(x)."""
+        return step + self.h(state)
+
     def solve(self):
         # TODO: Write your code here
         # return: a list of actions like: ["UP", "DOWN"]
-        pass
+        print(self.init_state, self.goal_state)
+        print(self.heuristic(self.init_state))
+        return []
 
     # You may add more (helper) methods if necessary.
     # Note that our evaluation scripts only call the solve method.
