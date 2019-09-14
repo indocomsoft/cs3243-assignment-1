@@ -2,7 +2,6 @@
 A* search using Manhattan distance heuristic.
 """
 
-import copy
 import heapq
 import sys
 
@@ -27,25 +26,25 @@ class Puzzle(object):
 
         def calculate_cost(i, j):
             val = state[i][j]
-            if val == 0:
-                return 0
             goal_i, goal_j = loc[val]
             return abs(goal_i - i) + abs(goal_j - j)
 
         return sum(
-            calculate_cost(i, j) for i in range(self.size)
-            for j in range(self.size))
+            calculate_cost(i, j) for i in xrange(self.size)
+            for j in xrange(self.size) if state[i][j])
 
     def solve(self):
         def find_blank(state):
-            for i in range(self.size):
-                for j in range(self.size):
-                    if state[i][j] == 0:
+            for i in xrange(self.size):
+                for j in xrange(self.size):
+                    if not state[i][j]:
                         return (i, j)
 
-        def generate_state(old_state, action, blank):
-            state = copy.deepcopy(old_state)
-            i, j = blank
+        def generate_state(old_state, action, i, j):
+            # Much faster than deep.deepcopy(x) because we know old_state is a
+            # non-recursive 2D list.
+            # Time to explore all nodes fell from 27s to 8s
+            state = [row[:] for row in old_state]
             if action == "UP":
                 state[i][j], state[i + 1][j] = state[i + 1][j], state[i][j]
             if action == "DOWN":
@@ -58,7 +57,7 @@ class Puzzle(object):
 
         def successors(state):
             actions = []
-            blank_i, blank_j = blank = find_blank(state)
+            blank_i, blank_j = find_blank(state)
             if blank_i < self.size - 1:
                 actions.append("UP")
             if blank_i > 0:
@@ -67,15 +66,16 @@ class Puzzle(object):
                 actions.append("LEFT")
             if blank_j > 0:
                 actions.append("RIGHT")
-            return [(action, generate_state(state, action, blank))
+            return [(action, generate_state(state, action, blank_i, blank_j))
                     for action in actions]
 
         pred = {}
 
+        str_init = str(self.init_state)
+
         def backtrack(state):
             result = []
             cur = str(state)
-            str_init = str(self.init_state)
             while cur != str_init:
                 cur, action = pred[cur]
                 result.append(action)
@@ -83,25 +83,21 @@ class Puzzle(object):
 
         # Frontier is (f, state, g)
         frontier = [(self.h(self.init_state), self.init_state, 0)]
-        frontier_set = set([str(self.init_state)])
+        frontier_set = set([str_init])
         visited = set()
         while frontier:
             _, state, g = heapq.heappop(frontier)
-            frontier_set.remove(str(state))
-
-            # The state was in the frontier
-            # (cheaper to check this way than when adding)
-            if str(state) in visited:
-                continue
+            str_old_state = str(state)
+            frontier_set.remove(str_old_state)
 
             if state == self.goal_state:
                 return backtrack(state)
-            visited.add(str(state))
+            visited.add(str_old_state)
             new_g = g + 1
             for new_action, new_state in successors(state):
                 str_state = str(new_state)
                 if str_state not in visited and str_state not in frontier_set:
-                    pred[str_state] = (str(state), new_action)
+                    pred[str_state] = (str_old_state, new_action)
                     new_score = new_g + self.h(new_state)
                     frontier_set.add(str_state)
                     heapq.heappush(frontier, (new_score, new_state, new_g))
@@ -122,8 +118,8 @@ if __name__ == "__main__":
     except IOError:
         raise IOError("Input file not found!")
 
-    init_state = [[0 for i in range(3)] for j in range(3)]
-    goal_state = [[0 for i in range(3)] for j in range(3)]
+    init_state = [[0 for i in xrange(3)] for j in xrange(3)]
+    goal_state = [[0 for i in xrange(3)] for j in xrange(3)]
     lines = f.readlines()
 
     i, j = 0, 0
@@ -136,7 +132,7 @@ if __name__ == "__main__":
                     i += 1
                     j = 0
 
-    for i in range(1, 9):
+    for i in xrange(1, 9):
         goal_state[(i - 1) // 3][(i - 1) % 3] = i
     goal_state[2][2] = 0
 
