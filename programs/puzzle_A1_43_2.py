@@ -13,8 +13,40 @@ class Puzzle(object):
         self.goal_state = goal_state
 
         self.size = 3
-
+    
     def h(self, state):
+        """
+        Returns sum of number of steps needed to resolve linear conflicts on 
+        both axes and manhattan distances.
+        """
+        conflicts = 0
+
+        cur_goal_pairs = []
+        for i in xrange(len(state)):
+            row = state[i]
+            goal_row = self.goal_state[i]
+            col = [state[j][i] for j in xrange(len(state))]
+            goal_col = [self.goal_state[j][i] for j in xrange(len(self.goal_state))]
+            cur_goal_pairs.extend([(row, goal_row), (col, goal_col)])
+
+        for cur, goal in cur_goal_pairs:
+            in_goal = [goal.index(elem) for elem in cur if elem in goal and elem != 0]
+            if not in_goal:
+                continue
+            conflict_arr = [0 for i in xrange(len(in_goal))]
+            for j in xrange(len(in_goal)):
+                for k in xrange(j + 1, len(in_goal)):
+                    if in_goal[j] > in_goal[k]:
+                        conflict_arr[j] += 1
+                        conflict_arr[k] += 1
+            conflict_max = max(conflict_arr)
+            if conflict_max > 0:
+                # Not guaranteed to work for dimension n > 3
+                conflicts += max(1, conflict_arr.count(conflict_max) - 1)
+
+        return self.manhattan(state) + 2 * conflicts
+
+    def manhattan(self, state):
         """
         Returns sum of manhattan distances of all tiles except blank tile.
         """
