@@ -13,10 +13,10 @@ class Puzzle(object):
         self.goal_state = goal_state
 
         self.size = 3
-    
+
     def h(self, state):
         """
-        Returns sum of number of steps needed to resolve linear conflicts on 
+        Returns sum of number of steps needed to resolve linear conflicts on
         both axes and manhattan distances.
         """
         conflicts = 0
@@ -26,11 +26,15 @@ class Puzzle(object):
             row = state[i]
             goal_row = self.goal_state[i]
             col = [state[j][i] for j in xrange(len(state))]
-            goal_col = [self.goal_state[j][i] for j in xrange(len(self.goal_state))]
+            goal_col = [
+                self.goal_state[j][i] for j in xrange(len(self.goal_state))
+            ]
             cur_goal_pairs.extend([(row, goal_row), (col, goal_col)])
 
         for cur, goal in cur_goal_pairs:
-            in_goal = [goal.index(elem) for elem in cur if elem in goal and elem != 0]
+            in_goal = [
+                goal.index(elem) for elem in cur if elem in goal and elem != 0
+            ]
             if not in_goal:
                 continue
             conflict_arr = [0 for i in xrange(len(in_goal))]
@@ -117,12 +121,21 @@ class Puzzle(object):
         frontier = [(self.h(self.init_state), self.init_state, 0)]
         frontier_set = set([str_init])
         visited = set()
+
+        # Statistics
+        num_nodes_generated = 0
+        max_frontier_size = 1
+
         while frontier:
+            max_frontier_size = max(max_frontier_size, len(frontier))
             _, state, g = heapq.heappop(frontier)
             str_old_state = str(state)
             frontier_set.remove(str_old_state)
 
             if state == self.goal_state:
+                print(
+                    "num_nodes_generated = {}, max_frontier_size = {}".format(
+                        num_nodes_generated, max_frontier_size))
                 return backtrack(state)
             visited.add(str_old_state)
             new_g = g + 1
@@ -133,6 +146,9 @@ class Puzzle(object):
                     new_score = new_g + self.h(new_state)
                     frontier_set.add(str_state)
                     heapq.heappush(frontier, (new_score, new_state, new_g))
+                    num_nodes_generated += 1
+        print("num_nodes_generated = {}, max_frontier_size = {}".format(
+            num_nodes_generated, max_frontier_size))
         return ["UNSOLVABLE"]
 
     # You may add more (helper) methods if necessary.
