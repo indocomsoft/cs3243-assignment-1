@@ -125,6 +125,7 @@ class Puzzle(object):
         # Statistics
         num_nodes_generated = 0
         max_frontier_size = 1
+        num_nodes_explored = 0
 
         while frontier:
             max_frontier_size = max(max_frontier_size, len(frontier))
@@ -132,10 +133,12 @@ class Puzzle(object):
             str_old_state = str(state)
             frontier_set.remove(str_old_state)
 
+            num_nodes_explored += 1
             if state == self.goal_state:
                 print(
-                    "num_nodes_generated = {}, max_frontier_size = {}".format(
-                        num_nodes_generated, max_frontier_size))
+                    "num_nodes_generated = {}, max_frontier_size = {}, num_nodes_explored = {}"
+                    .format(num_nodes_generated, max_frontier_size,
+                            num_nodes_explored))
                 return backtrack(state)
             visited.add(str_old_state)
             new_g = g + 1
@@ -147,8 +150,10 @@ class Puzzle(object):
                     frontier_set.add(str_state)
                     heapq.heappush(frontier, (new_score, new_state, new_g))
                     num_nodes_generated += 1
-        print("num_nodes_generated = {}, max_frontier_size = {}".format(
-            num_nodes_generated, max_frontier_size))
+        print(
+            "num_nodes_generated = {}, max_frontier_size = {}, num_nodes_explored = {}"
+            .format(num_nodes_generated, max_frontier_size,
+                    num_nodes_explored))
         return ["UNSOLVABLE"]
 
     # You may add more (helper) methods if necessary.
