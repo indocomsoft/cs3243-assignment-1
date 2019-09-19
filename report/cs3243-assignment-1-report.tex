@@ -70,7 +70,17 @@ $h_2(n)$ = $ManhattanDistance(n) + LinearConflict(n) = h_1(n) + LinearConflict(n
 
 The above proof is adapted from a paper published by Hansson, Mayer and Yung in 1985 on \textit{Generating Admissible Heuristics by Criticizing Solutions to Relaxed Models}.
 \section{Statistics}
-For given inputs, report number of nodes generated, maximum size of frontier that is reached. Check that solution is within 300 moves.
+\begin{center}
+\begin{tabular}{ |c|c|c|c| } 
+\hline
+ & $h_1$ Manhattan distance & $h_2$ Linear conflict \\
+\hline
+Number of nodes generated & 4250 & 2238 \\ 
+Maximum size of frontier that is reached & 1502 & 802 \\ 
+\hline
+\end{tabular}
+\end{center}
+
 
 \section{Analysis}
 \end{document}
