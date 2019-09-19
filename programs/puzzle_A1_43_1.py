@@ -97,7 +97,7 @@ class Puzzle(object):
             num_nodes_explored += 1
             if state == self.goal_state:
                 print(
-                    "num_nodes_generated = {}, max_frontier_size = {}, num_nodes_explored = {}"
+                    "num_nodes_generated = {0}, max_frontier_size = {1}, num_nodes_explored = {2}"
                     .format(num_nodes_generated, max_frontier_size,
                             num_nodes_explored))
                 return backtrack(state)
@@ -112,7 +112,7 @@ class Puzzle(object):
                     heapq.heappush(frontier, (new_score, new_state, new_g))
                     num_nodes_generated += 1
         print(
-            "num_nodes_generated = {}, max_frontier_size = {}, num_nodes_explored = {}"
+            "num_nodes_generated = {0}, max_frontier_size = {1}, num_nodes_explored = {2}"
             .format(num_nodes_generated, max_frontier_size,
                     num_nodes_explored))
         return ["UNSOLVABLE"]
