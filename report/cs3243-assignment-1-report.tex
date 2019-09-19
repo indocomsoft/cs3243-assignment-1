@@ -86,13 +86,13 @@ This heuristic works by augmenting the manhattan distance heuristic by adding th
 
 \begin{proof}
   Let $md(n, x)$ be the manhattan distance of tile $x$ in node $n$ and $lc(n, r_i)$ be the number of tiles that must be removed from row $r_i$ to resolve linear conflicts.
-  Assume that tile $x$ is moving from row $r_{old}$ to $r_{new}$, while remaining in column $c_{old}$. The impact of the change in position of tile $x$ relative to its goal position can be split into three scenarios:
+  Assume that tile $x$ moves from row $r_{old}$ to $r_{new}$ while remaining on column $c_{old}$. Consider the effects of tile $x$'s movement on $md(n', x)$ and $lc(n', x)$:
   \begin{enumerate}
     \item The goal position of $x$ is in neither row. $md(n', x) = md(n, x) \pm 1$. There are no new linear conflicts. Hence, $h_2(n') = h_2(n) \pm 1$ and $h_2(n') + c(n, n') = h_2(n') + 1 \geq h_2(n)$.
-    \item The goal position of $x$ is in $r_{new}$. Since $x$ moved into the row containing its goal position, $md(n', x) = md(n, x) - 1$ and this may or may not have new linear conflicts in row $r_{new}$, so $lc(n', r_{new}) = lc(n, r_{new})$ or $lc(n', r_{new}) = lc(n, r_{new}) + 2$. Because $r_{old}$ is not the goal row of $x$, its presence would not have contributed to any linear conflict there so $lc(n', r_{old}) = lc(n, r_{old})$. Hence, $h_2(n') = h_2(n) \pm 1$ and $h_2(n') + c(n, n') = h_2(n') + 1 \geq h_2(n)$.
-    \item The goal position of $x$ is in $r_{old}$. Since $x$ moved out of the row containing its goal position, $md(n', x) = md(n, x) + 1$ and we do not know whether it originally contributed to linear conflicts in $r_{old}$ so $lc(n', r_{old}) = lc(n, r_{old})$ or $lc(n', r_{old}) = lc(n, r_{old}) - 2$. Because $r_{new}$ is not the goal row of $x$, its presence would not have contributed to any linear conflict there so $lc(n', r_{new}) = lc(n, r_{new})$. Hence, $h_2(n') = h_2(n) \pm 1$ and $h_2(n') + c(n, n') = h_2(n') + 1 \geq h_2(n)$.
+    \item The goal position of $x$ is in $r_{new}$. Since $x$ moved into its goal row, $md(n', x) = md(n, x) - 1$. This may or may not create new linear conflicts in row $r_{new}$, so $lc(n', r_{new}) = lc(n, r_{new})$ or $lc(n', r_{new}) = lc(n, r_{new}) + 2$. Because $r_{old}$ is not the goal row of $x$, its absence would not contribute to any linear conflict in that row so $lc(n', r_{old}) = lc(n, r_{old})$. Hence, $h_2(n') = h_2(n) \pm 1$ and $h_2(n') + c(n, n') = h_2(n') + 1 \geq h_2(n)$.
+    \item The goal position of $x$ is in $r_{old}$. Since $x$ moved out of its goal row, $md(n', x) = md(n, x) + 1$. It may or may not have contributed to linear conflicts in $r_{old}$ so $lc(n', r_{old}) = lc(n, r_{old})$ or $lc(n', r_{old}) = lc(n, r_{old}) - 2$. Because $r_{new}$ is not the goal row of $x$, its presence would not contribute to any linear conflict in that row so $lc(n', r_{new}) = lc(n, r_{new})$. Hence, $h_2(n') = h_2(n) \pm 1$ and $h_2(n') + c(n, n') = h_2(n') + 1 \geq h_2(n)$.
   \end{enumerate}
-  In all three scenarios, $h_2$ remains consistent. By symmetry of the 8-puzzle, $h_2$ is similarly consistent for movements from column to column.
+  In all three cases, $h_2$ remains consistent. By symmetry of the 8-puzzle, $h_2$ is similarly consistent for movements from column to column.
 \end{proof}
 
 \subsection{Completeness and Optimality of Algorithms}
