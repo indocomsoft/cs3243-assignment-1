@@ -54,11 +54,8 @@ class Puzzle(object):
         """
         Returns sum of manhattan distances of all tiles except blank tile.
         """
-        loc = {
-            val: (i, j)
-            for i, row in enumerate(self.goal_state)
-            for j, val in enumerate(row)
-        }
+        loc = dict((val, (i, j)) for i, row in enumerate(self.goal_state)
+                   for j, val in enumerate(row))
 
         def calculate_cost(i, j):
             val = state[i][j]
