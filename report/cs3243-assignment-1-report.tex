@@ -55,16 +55,20 @@ To derive the Linear Conflict estimate for any node $n$,
 This heuristic works by augmenting the manhattan distance heuristic by adding the linear conflict estimate to it, thereby making it a more informed heuristic, tightening the lower bound. More detailed algorithm can be found in \citeA[p.~13]{hansson1985generating}.
 
 \section{Statistics}
-\begin{center}
-  \begin{tabular}{ |c|c|c|c| }
-    \hline
-                                             & $h_1$ Manhattan distance & $h_2$ Linear conflict \\
-    \hline
-    Number of nodes generated                & 4250                     & 2238                  \\
-    Maximum size of frontier that is reached & 1502                     & 802                   \\
-    \hline
+\begin{table}[!htb]
+  \caption{Statistics obtained from running the two programs on the given inputs}
+  \centering
+  \begin{tabular}{l|l|r|r}
+    \textbf{Heuristic} & \textbf{Input}        & \textbf{No. of nodes generated} & \textbf{Max. size of frontier reached} \\ \hline
+    $h_1$              & \texttt{input\_1.txt} & 9                               & 6                                      \\
+    $h_2$              & \texttt{input\_1.txt} & 9                               & 6                                      \\ \hline
+    $h_1$              & \texttt{input\_2.txt} & 4250                            & 1502                                   \\
+    $h_2$              & \texttt{input\_2.txt} & 2238                            & 802                                    \\ \hline
+
+    $h_1$              & \texttt{input\_3.txt} & 181439                          & 18722                                  \\
+    $h_2$              & \texttt{input\_3.txt} & 181439                          & 19865
   \end{tabular}
-\end{center}
+\end{table}
 
 \section{Analysis}
 \subsection{Proof of Consistency of Heuristics in A* Search}
