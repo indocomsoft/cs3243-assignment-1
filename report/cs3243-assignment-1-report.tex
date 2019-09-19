@@ -28,16 +28,16 @@ We implemented both programs using A* search but with different heuristic functi
 \section{Heuristics}
 We decided on the following heuristic functions:
 \begin{itemize}
-	\item $h_1$: Manhattan distance
-	\item $h_2$: Linear conflict
+  \item $h_1$: Manhattan distance
+  \item $h_2$: Linear conflict
 \end{itemize}
 
 \subsection{Manhattan distance}
-\textbf{Definition:} $h_1$ is the sum of the distances of the tiles from their goal positions. Since diagonal moves are not allowed, the distance is the sum of horizontal and vertical distances. 
+\textbf{Definition:} $h_1$ is the sum of the distances of the tiles from their goal positions. Since diagonal moves are not allowed, the distance is the sum of horizontal and vertical distances.
 
 \begin{proof}[Proof of consistency for $h_1$]
-	$ $ \\
-	For every node $n$, the step cost, $c(n, n')$, of getting to any of its successor node $n'$ is 1 because for each move, only one tile is allowed to move one step closer to or further away from its goal position, i.e. $h(n') = h(n) \pm 1$. When we substitute step cost as 1 into $h(n) \leq c(n, n') + h(n')$, we get $h(n) \leq 1 + h(n')$. It is then trivial to see that the condition holds, therefore $h_1$ is consistent.
+  $ $ \\
+  For every node $n$, the step cost, $c(n, n')$, of getting to any of its successor node $n'$ is 1 because for each move, only one tile is allowed to move one step closer to or further away from its goal position, i.e. $h(n') = h(n) \pm 1$. When we substitute step cost as 1 into $h(n) \leq c(n, n') + h(n')$, we get $h(n) \leq 1 + h(n')$. It is then trivial to see that the condition holds, therefore $h_1$ is consistent.
 \end{proof}
 
 \subsection{Linear conflict}
@@ -45,40 +45,40 @@ We decided on the following heuristic functions:
 
 To derive the Linear Conflict estimate for any node $n$,
 \begin{enumerate}
-	\item Calculate the minimum number of tiles that must be removed from $row_1$ such that there are no more linear conflicts.
-	\item Repeat Step 1 for the other rows and columns and sum them.
-	\item $LinearConflict(n) = 2 * $ result from Step 2
+  \item Calculate the minimum number of tiles that must be removed from $row_1$ such that there are no more linear conflicts.
+  \item Repeat Step 1 for the other rows and columns and sum them.
+  \item $LinearConflict(n) = 2 * $ result from Step 2
 \end{enumerate}
 
 Using the above property, we augment the manhattan distance heuristic by adding the linear conflict estimate to it, thereby making it a more informed heuristic.
 
 \begin{center}
-$h_2(n)$ = $ManhattanDistance(n) + LinearConflict(n) = h_1(n) + LinearConflict(n)$
+  $h_2(n)$ = $ManhattanDistance(n) + LinearConflict(n) = h_1(n) + LinearConflict(n)$
 \end{center}
 
 \begin{proof}[Proof of consistency for $h_2$]
-	$ $\newline
-	Let $md(n, x)$ be the manhattan distance of tile $x$ in node $n$ and $lc(n, r_i)$ be the number of tiles that must be removed from row $r_i$ to resolve linear conflicts. 
-	Assume that tile $x$ is moving from row $r_{old}$ to $r_{new}$, while remaining in column $c_{old}$. The impact of the change in position of tile $x$ relative to its goal position can be split into three scenarios:
-	\begin{enumerate}
-		\item The goal position of $x$ is in neither row. $md(n', x) = md(n, x) \pm 1$. There are no new linear conflicts. Hence, $h_2(n') = h_2(n) \pm 1$ and $h_2(n') + c(n, n') = h_2(n') + 1 \geq h_2(n)$.
-		\item The goal position of $x$ is in $r_{new}$. Since $x$ moved into the row containing its goal position, $md(n', x) = md(n, x) - 1$ and this may or may not have new linear conflicts in row $r_{new}$, so $lc(n', r_{new}) = lc(n, r_{new})$ or $lc(n', r_{new}) = lc(n, r_{new}) + 2$. Because $r_{old}$ is not the goal row of $x$, its presence would not have contributed to any linear conflict there so $lc(n', r_{old}) = lc(n, r_{old})$. Hence, $h_2(n') = h_2(n) \pm 1$ and $h_2(n') + c(n, n') = h_2(n') + 1 \geq h_2(n)$.
-		\item The goal position of $x$ is in $r_{old}$. Since $x$ moved out of the row containing its goal position, $md(n', x) = md(n, x) + 1$ and we do not know whether it originally contributed to linear conflicts in $r_{old}$ so $lc(n', r_{old}) = lc(n, r_{old})$ or $lc(n', r_{old}) = lc(n, r_{old}) - 2$. Because $r_{new}$ is not the goal row of $x$, its presence would not have contributed to any linear conflict there so $lc(n', r_{new}) = lc(n, r_{new})$. Hence, $h_2(n') = h_2(n) \pm 1$ and $h_2(n') + c(n, n') = h_2(n') + 1 \geq h_2(n)$.
-	\end{enumerate}
-	In all three scenarios, $h_2$ remains consistent. By symmetry of the 8-puzzle, $h_2$ is similarly consistent for movements from column to column. 
+  $ $\newline
+  Let $md(n, x)$ be the manhattan distance of tile $x$ in node $n$ and $lc(n, r_i)$ be the number of tiles that must be removed from row $r_i$ to resolve linear conflicts.
+  Assume that tile $x$ is moving from row $r_{old}$ to $r_{new}$, while remaining in column $c_{old}$. The impact of the change in position of tile $x$ relative to its goal position can be split into three scenarios:
+  \begin{enumerate}
+    \item The goal position of $x$ is in neither row. $md(n', x) = md(n, x) \pm 1$. There are no new linear conflicts. Hence, $h_2(n') = h_2(n) \pm 1$ and $h_2(n') + c(n, n') = h_2(n') + 1 \geq h_2(n)$.
+    \item The goal position of $x$ is in $r_{new}$. Since $x$ moved into the row containing its goal position, $md(n', x) = md(n, x) - 1$ and this may or may not have new linear conflicts in row $r_{new}$, so $lc(n', r_{new}) = lc(n, r_{new})$ or $lc(n', r_{new}) = lc(n, r_{new}) + 2$. Because $r_{old}$ is not the goal row of $x$, its presence would not have contributed to any linear conflict there so $lc(n', r_{old}) = lc(n, r_{old})$. Hence, $h_2(n') = h_2(n) \pm 1$ and $h_2(n') + c(n, n') = h_2(n') + 1 \geq h_2(n)$.
+    \item The goal position of $x$ is in $r_{old}$. Since $x$ moved out of the row containing its goal position, $md(n', x) = md(n, x) + 1$ and we do not know whether it originally contributed to linear conflicts in $r_{old}$ so $lc(n', r_{old}) = lc(n, r_{old})$ or $lc(n', r_{old}) = lc(n, r_{old}) - 2$. Because $r_{new}$ is not the goal row of $x$, its presence would not have contributed to any linear conflict there so $lc(n', r_{new}) = lc(n, r_{new})$. Hence, $h_2(n') = h_2(n) \pm 1$ and $h_2(n') + c(n, n') = h_2(n') + 1 \geq h_2(n)$.
+  \end{enumerate}
+  In all three scenarios, $h_2$ remains consistent. By symmetry of the 8-puzzle, $h_2$ is similarly consistent for movements from column to column.
 \end{proof}
 
 The above proof is adapted from a paper published by Hansson, Mayer and Yung in 1985 on \textit{Generating Admissible Heuristics by Criticizing Solutions to Relaxed Models}.
 \section{Statistics}
 \begin{center}
-\begin{tabular}{ |c|c|c|c| } 
-\hline
- & $h_1$ Manhattan distance & $h_2$ Linear conflict \\
-\hline
-Number of nodes generated & 4250 & 2238 \\ 
-Maximum size of frontier that is reached & 1502 & 802 \\ 
-\hline
-\end{tabular}
+  \begin{tabular}{ |c|c|c|c| }
+    \hline
+                                             & $h_1$ Manhattan distance & $h_2$ Linear conflict \\
+    \hline
+    Number of nodes generated                & 4250                     & 2238                  \\
+    Maximum size of frontier that is reached & 1502                     & 802                   \\
+    \hline
+  \end{tabular}
 \end{center}
 
 
