@@ -33,9 +33,12 @@ We decided on the following heuristic functions:
 \end{itemize}
 
 \subsection{Manhattan distance}
-\textbf{Definition:} $h_1$ is the sum of the distances of the tiles from their goal positions. Since diagonal moves are not allowed, the distance is the sum of horizontal and vertical distances. \\
+\textbf{Definition:} $h_1$ is the sum of the distances of the tiles from their goal positions. Since diagonal moves are not allowed, the distance is the sum of horizontal and vertical distances. 
 
-For every node $n$, the step cost, $c(n, n')$, of getting to any of its successor node $n'$ is 1 because for each move, only one tile is allowed to move one step closer to or further away from its goal position, i.e. $h(n') = h(n) \pm 1$. When we substitute step cost as 1 into $h(n) \leq c(n, n') + h(n')$, we get $h(n) \leq 1 + h(n')$. It is then trivial to see that the condition holds, therefore $h_1$ is consistent. \qed
+\begin{proof}[Proof of consistency for $h_1$]
+	$ $ \\
+	For every node $n$, the step cost, $c(n, n')$, of getting to any of its successor node $n'$ is 1 because for each move, only one tile is allowed to move one step closer to or further away from its goal position, i.e. $h(n') = h(n) \pm 1$. When we substitute step cost as 1 into $h(n) \leq c(n, n') + h(n')$, we get $h(n) \leq 1 + h(n')$. It is then trivial to see that the condition holds, therefore $h_1$ is consistent.
+\end{proof}
 
 \subsection{Linear conflict}
 \textbf{Definition:} Two tiles $t_j$ and $t_k$ are in a linear conflict if $t_j$ and $t_k$ are in the same line, the goal positions of $t_j$ and $t_k$ are both in that line, $t_j$ is to the right of $t_k$, and the goal position of $t_j$ is to the left of the goal position of $t_k$.\\
