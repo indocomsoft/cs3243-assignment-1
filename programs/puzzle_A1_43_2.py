@@ -1,5 +1,5 @@
 """
-A* search using Manhattan distance heuristic.
+A* search using Linear Conflict heuristic.
 """
 
 import heapq
