@@ -113,11 +113,11 @@ This is supported by results from table~\ref{tab:stats} as the relative proporti
 Thus, more dominant heuristics should yield lower memory consumption as the A* search algorithm spent expands less nodes.
 
 However, this is inconsistent with the observations for the unsolvable test case.
-In table~\ref{tab:stats}, A* search using $h_2$ heuristic consumes more memory than A* search using $h_1$ heuristic for the unsolveable test case.
+In table~\ref{tab:stats}, A* search using $h_2$ heuristic consumes more memory than A* search using $h_1$ heuristic for the unsolvable test case.
 Results were similar for other unsolvable test cases of our own construction.
 We then ran the same unsolvable test cases using a third heuristic $h_3$, the number of misplaced tiles heuristic.
 $h_3$ showed higher memory consumption than both $h_1$ and $h_2$, which is consistent with the fact that both $h_1$ and $h_2$ dominates $h_3$.
-We are unable to fully explain why in the unsolveable cases, $h_2$ consumes more memory than $h_1$, but we have our own hypothesis.
+We are unable to fully explain why in the unsolvable cases, $h_2$ consumes more memory than $h_1$, but we have our own hypothesis.
 
 In the unsolvable cases, the goal state is not one of the nodes that can be generated from expanding the initial state node.
 Thus, the heuristic functions never actually return $0$, which breaks an assumption in the A* search optimality.
