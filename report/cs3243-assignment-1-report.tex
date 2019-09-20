@@ -122,7 +122,7 @@ We are unable to fully explain why in the unsolvable cases, $h_2$ consumes more 
 In the unsolvable cases, the goal state is not one of the nodes that can be generated from expanding the initial state node.
 Thus, the heuristic functions never actually return $0$, which breaks an assumption in the A* search optimality.
 Since $h_2$ has a tighter lower bound than $h_1$, the spread of values of $h_2(n)$ is narrower than those of $h_1(n)$.
-This results in many ties of nodes with high priority in the priority queue, which when expanded results in new nodes with similarly high priority, resulting in a larger max frontier size.
+This results in many ties of nodes with high priority in the priority queue, which when expanded results in new nodes with similarly high priority, resulting in a larger max frontier size. This hypothesis is supported by \citeA[p.~2]{holte2010common} which states that a more dominant heuristic does not guarantee fewer node expansions in A* search.
 
 \bibliographystyle{apacite}
 \bibliography{report}
